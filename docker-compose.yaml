@@ -3,9 +3,9 @@ services:
     postgres:
         image: postgres:16.1-bullseye
         environment:
-            - POSTGRES_USER=copyme
-            - POSTGRES_PASSWORD=copyme
-            - POSTGRES_DB=copyme
+            - POSTGRES_USER=root
+            - POSTGRES_PASSWORD=root
+            - POSTGRES_DB=root
         ports: 
             - 5432:5432
         logging:
@@ -15,51 +15,8 @@ services:
     pgadmin:
         image: dpage/pgadmin4
         environment: 
-            - PGADMIN_DEFAULT_EMAIL=copyme@mail.com
-            - PGADMIN_DEFAULT_PASSWORD=copyme
+            - PGADMIN_DEFAULT_EMAIL=test@mail.com
+            - PGADMIN_DEFAULT_PASSWORD=test
         ports: 
             - "5050:80"
 
-    prometheus:
-        image: prom/prometheus
-        ports:
-        - "9090:9090"
-        volumes:
-        - ./prometheus:/etc/prometheus
-        command:
-        - "--config.file=/etc/prometheus/prometheus.yml"
-        networks:
-        - monitoring
-
-    grafana:
-        image: grafana/grafana
-        ports:
-        - "3000:3000"
-        networks:
-        - monitoring
-
-    loki:
-        image: grafana/loki
-        ports:
-        - "3100:3100"
-        networks:
-        - monitoring
-
-    docker-exporter:
-        image: prom/node-exporter
-        ports:
-        - "9100:9100"
-        networks:
-        - monitoring
-        volumes:
-        - /proc:/host/proc:ro
-        - /sys:/host/sys:ro
-        - /:/rootfs:ro
-        command:
-        - "--path.procfs=/host/proc"
-        - "--path.sysfs=/host/sys"
-        - "--path.rootfs=/rootfs"
-        - "--collector.textfile.directory=/etc/node-exporter"
-
-networks:
-  monitoring:
